@@ -1,0 +1,169 @@
+--------------------------------GET------------------------------------
+
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using System.Data.SqlClient;
+using Patient.Modals;
+using System.Data;
+namespace Patient.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class Patientcontroller : ControllerBase
+    {
+        [HttpGet]
+        [Route("Get")]
+        //Creating Method for fetching data from Sql
+        //Access Modifiers//Returntype//Modal//Method
+        public List<Patientka> GetPatientkas()///For The List we are Creating the Method()
+        {
+            string connectionString = "Data Source=10.218.3.138;Initial Catalog= KH_REL;Persist Security Info = True;User ID =;Password=";
+            SqlConnection connection = new SqlConnection(connectionString);
+            string query = "select top 10 serialno, drname,fname,mname,lname from UlexM.vmunmdoctor";
+            SqlDataAdapter data = new SqlDataAdapter(query, connection);
+            DataTable dt = new DataTable();///only for one table if you have two tables you can use the dataset//
+            data.Fill(dt);
+            List<Patientka> list = new List<Patientka>();
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                Patientka pa1 = new Patientka();
+                pa1.serialno = dt.Rows[i]["serialno"].ToString();
+                pa1.drname = dt.Rows[i]["drname"].ToString();
+                pa1.fname = dt.Rows[i]["fname"].ToString();
+                pa1.mname=dt.Rows[i]["mname"].ToString();
+                pa1.lname = dt.Rows[i]["lname"].ToString();
+                list.Add(pa1);
+            }
+            return list;
+        }
+    }
+}
+------------------------Insert------------------------------
+
+using Employeeee.Modal;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using System.Data.SqlClient;
+using System.Data;
+using System.Reflection.Metadata.Ecma335;
+
+namespace Employeeee.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class Employeeecontroller : ControllerBase
+    {
+        [HttpPost]
+        //insert//
+
+        //Html verb to get Data in website
+
+        //create a list and for that list we gave method()
+        public string PostItem(EmployeeModel model)
+        {
+            //create the connection string//
+            string connection = "Data Source = 10.218.3.138; Initial Catalog = KH_REL; Persist Security Info = True; User ID = ;Password=";
+            SqlConnection conn = new SqlConnection(connection);
+            //Query//
+            string query = "insert into Emp33 values(@id,@name,@gender )";
+            SqlCommand com = new SqlCommand(query, conn);
+            //method//
+            com.Parameters.AddWithValue("@id", model.id);
+            com.Parameters.AddWithValue("@name", model.name);
+            com.Parameters.AddWithValue("@gender", model.gender);
+            conn.Open();
+            com.ExecuteNonQuery();
+            conn.Close();
+            return "Item add";
+        }
+
+        }
+
+    }
+
+------------------------------------------------------------------------
+using Employeeee.Modal;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using System.Data.SqlClient;
+using System.Data;
+using System.Reflection.Metadata.Ecma335;
+
+namespace Employeeee.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class Employeeecontroller : ControllerBase
+    {
+        [HttpPost]
+        //insert//
+
+        //Html verb to get Data in website
+
+        //create a list and for that list we gave method()
+        public string PostItem(EmployeeModel model)
+        {
+            //create the connection string//
+            string connection = "Data Source = 10.218.3.138; Initial Catalog = KH_REL; Persist Security Info = True; User ID = kh;Password=kh";
+            SqlConnection conn = new SqlConnection(connection);
+            //Query//
+            string query = "insert into Emp33 values(@id,@name,@gender )";
+            SqlCommand com = new SqlCommand(query, conn);
+            //method//
+            com.Parameters.AddWithValue("@id", model.id);
+            com.Parameters.AddWithValue("@name", model.name);
+            com.Parameters.AddWithValue("@gender", model.gender);
+            conn.Open();
+            com.ExecuteNonQuery();
+            conn.Close();
+            return "Item add";
+        }
+        //put Means Update//
+        [HttpPut]
+        [Route("Put")]
+        public string PutItem(string name,string id)
+        {
+            //create the connection string//
+            string connection = "Data Source = 10.218.3.138; Initial Catalog = KH_REL; Persist Security Info = True; User ID = kh;Password=";
+            SqlConnection conn = new SqlConnection(connection);
+            //Query//
+            string query = "update Emp33 set name=@name where id=@id";
+            SqlCommand com = new SqlCommand(query, conn);
+            com.Parameters.AddWithValue("@id", id);
+            com.Parameters.AddWithValue("@name",name);
+        
+            //method//
+            conn.Open();
+            com.ExecuteNonQuery();
+            conn.Close();
+            return "Item Updated";
+        }
+        //https:////localhost:7287/api/Employeee/Put?Name=Giridhara Manisai Gunukula&Id=1012//
+
+
+        [HttpDelete]
+        [Route("Delete")]
+        public string DeleteItem(string id)
+        {
+            //create the connection string//
+            string connection = "Data Source = 10.218.3.138; Initial Catalog = KH_REL; Persist Security Info = True; User ID = kh;Password=";
+            SqlConnection conn = new SqlConnection(connection);
+            //Query//
+            string query = "Delete from Emp33 where id=@id";
+            SqlCommand com = new SqlCommand(query, conn);
+            com.Parameters.AddWithValue("@id", id);
+
+            //method//
+            conn.Open();
+            com.ExecuteNonQuery();
+            conn.Close();
+            return "Item Delete";
+        }
+        //Reference//
+       ///// https:////localhost:7287/api/Employeee/Delete?Id=1012////
+
+
+    }
+
+}
+
